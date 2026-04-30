@@ -28,6 +28,7 @@ export class Game {
   private hud: HUD;
   private running = false;
   private startedAt = 0;
+  private audioBootstrapped = false;
 
   onDeath: ((kills: number, timeAlive: number) => void) | null = null;
   onVictory: ((kills: number, timeAlive: number) => void) | null = null;
@@ -86,12 +87,19 @@ export class Game {
     if (this.running) return;
     this.running = true;
     if (this.startedAt === 0) this.startedAt = performance.now();
-    // First start happens inside a click handler — kick the AudioContext alive
-    // and re-trigger the ambient drone (the constructor's earlier levels.start()
-    // tried to start one silently because audio wasn't ready yet).
+    // First time the player clicks PLAY — the AudioContext can finally be
+    // created (browsers require a user gesture). The constructor's
+    // levels.start() ran earlier with audio still un-initialised, so its
+    // levelStart cue + ambient drone were silent. Replay them once. On
+    // subsequent calls (resume from Esc pause, respawn) audio is already
+    // healthy and we skip this block to avoid an audible drone restart dip.
     this.audio.resume();
-    const spec = this.levels.currentSpec();
-    this.audio.startAmbient(spec.ambientHz, spec.ambientColor);
+    if (!this.audioBootstrapped) {
+      this.audioBootstrapped = true;
+      const spec = this.levels.currentSpec();
+      this.audio.play('levelStart');
+      this.audio.startAmbient(spec.ambientHz, spec.ambientColor);
+    }
     this.input.requestPointerLock();
     this.clock.start();
     this.loop();

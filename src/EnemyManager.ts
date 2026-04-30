@@ -98,7 +98,9 @@ export class EnemyManager {
         this.enemies.splice(i, 1);
         // Only count kills for enemies that died (not e.g. a spawn that was forcibly cleared).
         this.kills++;
-        this.audio.play('enemyDie');
+        // Kamikaze detonation already played its own cue; skip the generic
+        // sawtooth growl for archetypes that signal death their own way.
+        if (!e.hasCustomDeathSound) this.audio.play('enemyDie');
       }
     }
   }

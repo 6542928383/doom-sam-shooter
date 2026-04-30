@@ -86,6 +86,7 @@ export class Kamikaze extends Enemy {
     if (this.detonated) return;
     this.detonated = true;
     this.alive = false;
+    this.hasCustomDeathSound = true;
     this.applyBlast(ctx, epicenter);
     ctx.audio.play('kamikazeBoom');
 
