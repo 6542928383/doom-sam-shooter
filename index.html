@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>DOOM-SAM — Hybrid FPS</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="hud">
+      <div class="hud-row">
+        <div class="hud-stat" id="hud-health">
+          <span class="hud-label">HEALTH</span>
+          <span class="hud-value" id="hud-health-value">100</span>
+        </div>
+        <div class="hud-stat" id="hud-armor">
+          <span class="hud-label">ARMOR</span>
+          <span class="hud-value" id="hud-armor-value">0</span>
+        </div>
+        <div class="hud-stat" id="hud-ammo">
+          <span class="hud-label">AMMO</span>
+          <span class="hud-value" id="hud-ammo-value">∞</span>
+        </div>
+        <div class="hud-stat" id="hud-weapon">
+          <span class="hud-label">WEAPON</span>
+          <span class="hud-value" id="hud-weapon-value">PISTOL</span>
+        </div>
+        <div class="hud-stat" id="hud-kills">
+          <span class="hud-label">KILLS</span>
+          <span class="hud-value" id="hud-kills-value">0</span>
+        </div>
+      </div>
+    </div>
+    <div id="crosshair">+</div>
+    <div id="overlay" class="visible">
+      <h1>DOOM&nbsp;·&nbsp;SAM</h1>
+      <p class="subtitle">Hybrid FPS — classic corridors meet endless hordes</p>
+      <div class="controls">
+        <div><kbd>WASD</kbd> move</div>
+        <div><kbd>Mouse</kbd> aim</div>
+        <div><kbd>LMB</kbd> fire</div>
+        <div><kbd>Shift</kbd> sprint</div>
+        <div><kbd>Space</kbd> jump</div>
+        <div><kbd>Esc</kbd> release pointer</div>
+      </div>
+      <button id="start-btn">CLICK TO PLAY</button>
+    </div>
+    <div id="death-overlay" class="hidden">
+      <h1>YOU DIED</h1>
+      <p id="death-stats"></p>
+      <button id="respawn-btn">RESPAWN</button>
+    </div>
+    <canvas id="game"></canvas>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
