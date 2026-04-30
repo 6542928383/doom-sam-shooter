@@ -28,6 +28,11 @@ export class EnemyManager {
     }
   }
 
+  /** Read-only enumeration of all enemies currently tracked. */
+  list(): readonly Enemy[] {
+    return this.enemies;
+  }
+
   reset(): void {
     for (const e of this.enemies) e.removeFromScene(this.scene);
     this.enemies = [];

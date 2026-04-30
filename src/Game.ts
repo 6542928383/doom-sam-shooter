@@ -39,7 +39,7 @@ export class Game {
     this.input = new InputManager(canvas);
     this.level = new Level(this.scene);
     this.player = new Player(this.camera, this.level);
-    this.weapons = new WeaponSystem(this.scene, this.camera);
+    this.weapons = new WeaponSystem(this.scene, this.camera, this.level);
     this.enemies = new EnemyManager(this.scene, this.level);
     this.hud = new HUD();
 
@@ -58,6 +58,11 @@ export class Game {
     this.input.onSwitchWeapon = (slot) => {
       if (!this.running) return;
       this.weapons.switchTo(slot);
+    };
+
+    this.input.onCycleWeapon = (dir) => {
+      if (!this.running) return;
+      this.weapons.cycle(dir);
     };
 
     this.spawnInitialEntities();
@@ -94,7 +99,7 @@ export class Game {
 
     this.player.update(dt, this.input);
     this.enemies.update(dt, this.player);
-    this.weapons.update(dt);
+    this.weapons.update(dt, this.input.isFiring(), this.enemies);
 
     if (this.player.didTakeDamage()) {
       this.hud.flashDamage();
