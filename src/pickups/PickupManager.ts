@@ -96,6 +96,11 @@ export class PickupManager {
   }
 
   private applyTo(p: ActivePickup, player: Player, weapons: WeaponSystem): boolean {
+    // Don't resurrect a dead player: enemies.update() runs before pickups.update()
+    // in the main loop, so a player who took lethal damage this frame is already
+    // at health = 0 by the time we get here. Without this guard, a health crate
+    // would heal them past 0 and the onDeath callback would never fire.
+    if (player.isDead()) return false;
     switch (p.kind) {
       case PickupKind.Health: {
         if (player.health >= player.maxHealth) return false;
