@@ -2,16 +2,19 @@ import * as THREE from 'three';
 import { Projectile, type ProjectileOpts } from './Projectile';
 import type { EnemyManager } from '../EnemyManager';
 import type { Level } from '../Level';
+import type { AudioManager } from '../audio/AudioManager';
 
 export class ProjectileManager {
   private scene: THREE.Scene;
   private level: Level;
+  private audio: AudioManager;
   private projectiles: Projectile[] = [];
   private explosions: { mesh: THREE.Mesh; light: THREE.PointLight; ttl: number }[] = [];
 
-  constructor(scene: THREE.Scene, level: Level) {
+  constructor(scene: THREE.Scene, level: Level, audio: AudioManager) {
     this.scene = scene;
     this.level = level;
+    this.audio = audio;
   }
 
   spawn(opts: ProjectileOpts): void {
@@ -56,6 +59,8 @@ export class ProjectileManager {
       if (!stillAlive) {
         if (before && (p.splashRadius > 0 && p.splashDamage > 0)) {
           this.spawnExplosion(p.position, 0xffaa44, p.splashRadius);
+          // Bigger splash radius = bigger boom (cannon vs rocket).
+          this.audio.play(p.splashRadius >= 8 ? 'cannonExplode' : 'rocketExplode');
         }
         this.scene.remove(p.mesh);
         this.projectiles.splice(i, 1);

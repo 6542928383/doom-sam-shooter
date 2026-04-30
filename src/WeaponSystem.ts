@@ -6,6 +6,17 @@ import { ProjectileManager } from './weapons/ProjectileManager';
 import { Fist, Pistol, Shotgun, Chaingun } from './weapons/HitscanWeapons';
 import { RocketLauncher, Minigun, Cannon } from './weapons/ProjectileWeapons';
 import type { Weapon } from './weapons/types';
+import type { AudioManager, SfxId } from './audio/AudioManager';
+
+const FIRE_SFX: Record<string, SfxId> = {
+  FIST: 'fist',
+  PISTOL: 'pistol',
+  SHOTGUN: 'shotgun',
+  CHAINGUN: 'chaingun',
+  'ROCKET LAUNCHER': 'rocketLaunch',
+  MINIGUN: 'plasma',
+  CANNON: 'bfg',
+};
 
 /**
  * Manages the active weapon, the player's inventory, and projectiles.
@@ -14,6 +25,7 @@ import type { Weapon } from './weapons/types';
 export class WeaponSystem {
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
+  private audio: AudioManager;
   private weapons: Weapon[];
   private current = 1; // pistol by default
   private cooldown = 0;
@@ -27,10 +39,11 @@ export class WeaponSystem {
   private switchCooldown = 0;
   private autoFireDirty = false;
 
-  constructor(scene: THREE.Scene, camera: THREE.PerspectiveCamera, level: Level) {
+  constructor(scene: THREE.Scene, camera: THREE.PerspectiveCamera, level: Level, audio: AudioManager) {
     this.scene = scene;
     this.camera = camera;
-    this.projectiles = new ProjectileManager(scene, level);
+    this.audio = audio;
+    this.projectiles = new ProjectileManager(scene, level, audio);
 
     this.weapons = [
       new Fist(),
@@ -132,6 +145,9 @@ export class WeaponSystem {
       projectiles: this.projectiles,
       scene: this.scene,
     });
+
+    const sfx = FIRE_SFX[w.name];
+    if (sfx) this.audio.play(sfx);
 
     // Muzzle flash + recoil.
     this.flash.position.copy(origin).add(direction.clone().multiplyScalar(0.6));

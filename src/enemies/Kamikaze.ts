@@ -87,6 +87,7 @@ export class Kamikaze extends Enemy {
     this.detonated = true;
     this.alive = false;
     this.applyBlast(ctx, epicenter);
+    ctx.audio.play('kamikazeBoom');
 
     const geom = new THREE.SphereGeometry(EXPLOSION_RADIUS, 16, 16);
     const mat = new THREE.MeshBasicMaterial({

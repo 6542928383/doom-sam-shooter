@@ -9,6 +9,7 @@ import { Bull } from './enemies/Bull';
 import { Mancubus } from './enemies/Mancubus';
 import { EnemyKind, type EnemyContext } from './enemies/types';
 import { EnemyProjectileManager } from './enemies/EnemyProjectileManager';
+import type { AudioManager } from './audio/AudioManager';
 
 /**
  * Owns the live enemy list. Spawning is delegated to the WaveManager — this class
@@ -18,13 +19,15 @@ import { EnemyProjectileManager } from './enemies/EnemyProjectileManager';
 export class EnemyManager {
   private scene: THREE.Scene;
   private level: Level;
+  private audio: AudioManager;
   private enemies: Enemy[] = [];
   readonly projectiles: EnemyProjectileManager;
   kills = 0;
 
-  constructor(scene: THREE.Scene, level: Level) {
+  constructor(scene: THREE.Scene, level: Level, audio: AudioManager) {
     this.scene = scene;
     this.level = level;
+    this.audio = audio;
     this.projectiles = new EnemyProjectileManager(scene);
   }
 
@@ -81,6 +84,7 @@ export class EnemyManager {
       level: this.level,
       player,
       projectiles: this.projectiles,
+      audio: this.audio,
     };
 
     for (const e of this.enemies) e.update(dt, ctx);
@@ -94,6 +98,7 @@ export class EnemyManager {
         this.enemies.splice(i, 1);
         // Only count kills for enemies that died (not e.g. a spawn that was forcibly cleared).
         this.kills++;
+        this.audio.play('enemyDie');
       }
     }
   }

@@ -61,6 +61,28 @@ canvas#game {
   font-family: 'Impact', 'Courier New', sans-serif;
 }
 
+#audio-toggle {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 5;
+  background: rgba(20, 8, 6, 0.65);
+  color: #ffaa66;
+  border: 1px solid #cc6633;
+  padding: 6px 12px;
+  font-family: 'Impact', 'Courier New', sans-serif;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+}
+#audio-toggle:hover {
+  background: rgba(60, 18, 12, 0.85);
+}
+#audio-toggle.muted {
+  color: #888;
+  border-color: #555;
+}
+
 #crosshair {
   position: fixed;
   left: 50%;

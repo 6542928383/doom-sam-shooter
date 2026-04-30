@@ -108,6 +108,7 @@ export class Bull extends Enemy {
         this.chargeDir.set(dx * inv, 0, dz * inv);
         this.chargeTimer = CHARGE_DURATION;
         this.chargeCooldown = CHARGE_COOLDOWN;
+        ctx.audio.play('bullCharge');
       }
     }
 

@@ -4,6 +4,7 @@ import type { EnemyManager } from '../EnemyManager';
 import type { Player } from '../Player';
 import type { PickupManager } from '../pickups/PickupManager';
 import type { LevelSpec } from './LevelSpec';
+import type { AudioManager } from '../audio/AudioManager';
 import { LEVELS } from './levelData';
 
 export interface LevelStatus {
@@ -22,11 +23,13 @@ export interface LevelStatus {
  */
 export class LevelManager {
   private specs: LevelSpec[];
+  private audio: AudioManager;
   private index = 0;
   private portalSpawned = false;
   private victory = false;
 
-  constructor(specs: LevelSpec[] = LEVELS) {
+  constructor(audio: AudioManager, specs: LevelSpec[] = LEVELS) {
+    this.audio = audio;
     this.specs = specs;
   }
 
@@ -69,6 +72,7 @@ export class LevelManager {
     if (status.allClear && !this.portalSpawned) {
       level.spawnPortal();
       this.portalSpawned = true;
+      this.audio.play('portalReady');
     }
 
     if (this.portalSpawned) {
@@ -81,6 +85,7 @@ export class LevelManager {
   private advance(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, pickups: PickupManager): void {
     if (this.index >= this.specs.length - 1) {
       this.victory = true;
+      this.audio.play('victory');
       return;
     }
     this.index++;
@@ -100,5 +105,7 @@ export class LevelManager {
     pickups.loadSpecs(spec.pickups);
     player.respawnAt(level.playerStart);
     this.portalSpawned = false;
+    this.audio.play('levelStart');
+    this.audio.startAmbient(spec.ambientHz, spec.ambientColor);
   }
 }
