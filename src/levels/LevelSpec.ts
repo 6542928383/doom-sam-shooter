@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { EnemyKind } from '../enemies/types';
+import type { PickupSpec } from '../pickups/types';
 
 /** A single AABB box obstacle (wall, pillar, prop) baked into the level. */
 export interface ObstacleSpec {
@@ -61,4 +62,7 @@ export interface LevelSpec {
 
   /** Waves run on this level in order. Cleared all → portal spawns. */
   waves: WaveSpec[];
+
+  /** Static pickups placed around the level. */
+  pickups: PickupSpec[];
 }
