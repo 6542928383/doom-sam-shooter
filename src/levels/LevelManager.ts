@@ -87,7 +87,12 @@ export class LevelManager {
   private applyCurrent(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, banner: string): void {
     const spec = this.specs[this.index];
     level.loadSpec(spec);
+    // Preserve the campaign kill total across level transitions. EnemyManager.reset()
+    // also despawns enemies/projectiles, which is what we want — but it zeroes kills,
+    // which would lose the cumulative campaign score.
+    const savedKills = enemies.kills;
     enemies.reset();
+    enemies.kills = savedKills;
     waves.setWaves(spec.waves, banner);
     player.respawnAt(level.playerStart);
     this.portalSpawned = false;
