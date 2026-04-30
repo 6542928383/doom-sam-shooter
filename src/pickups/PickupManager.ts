@@ -76,8 +76,6 @@ export class PickupManager {
   /** Animate floating pickups and pick up anything the player touches. */
   update(dt: number, player: Player, weapons: WeaponSystem): void {
     this.elapsed += dt;
-    const py = 0;
-    void py;
     for (const p of this.pickups) {
       if (!p.alive) continue;
       // Bob + spin.
@@ -110,17 +108,13 @@ export class PickupManager {
         return true;
       }
       case PickupKind.Bullets:
-        weapons.addAmmoBullets(p.amount);
-        return true;
+        return weapons.addAmmoBullets(p.amount);
       case PickupKind.Shells:
-        weapons.addAmmoShells(p.amount);
-        return true;
+        return weapons.addAmmoShells(p.amount);
       case PickupKind.Rockets:
-        weapons.addAmmoRockets(p.amount);
-        return true;
+        return weapons.addAmmoRockets(p.amount);
       case PickupKind.Cells:
-        weapons.addAmmoCells(p.amount);
-        return true;
+        return weapons.addAmmoCells(p.amount);
     }
   }
 

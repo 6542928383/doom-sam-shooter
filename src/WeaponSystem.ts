@@ -171,17 +171,17 @@ export class WeaponSystem {
     this.projectiles.reset();
   }
 
-  /** Pickup hooks (used by future PR #5). */
-  addAmmoBullets(n: number): void {
-    this.inventory.add(this.weapons[1].ammoType, n);
+  /** Pickup hooks. Each returns true if any ammo was actually added (false at cap). */
+  addAmmoBullets(n: number): boolean {
+    return this.inventory.add(this.weapons[1].ammoType, n);
   }
-  addAmmoShells(n: number): void {
-    this.inventory.add(this.weapons[2].ammoType, n);
+  addAmmoShells(n: number): boolean {
+    return this.inventory.add(this.weapons[2].ammoType, n);
   }
-  addAmmoRockets(n: number): void {
-    this.inventory.add(this.weapons[4].ammoType, n);
+  addAmmoRockets(n: number): boolean {
+    return this.inventory.add(this.weapons[4].ammoType, n);
   }
-  addAmmoCells(n: number): void {
-    this.inventory.add(this.weapons[6].ammoType, n);
+  addAmmoCells(n: number): boolean {
+    return this.inventory.add(this.weapons[6].ammoType, n);
   }
 }

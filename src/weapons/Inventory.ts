@@ -42,11 +42,14 @@ export class Inventory {
     return true;
   }
 
-  add(type: AmmoType, amount: number): void {
-    if (type === AmmoType.Infinite) return;
+  /** Returns true if any ammo was actually added (false when already at cap). */
+  add(type: AmmoType, amount: number): boolean {
+    if (type === AmmoType.Infinite) return false;
     const cap = this.max.get(type) ?? amount;
     const current = this.ammo.get(type) ?? 0;
+    if (current >= cap) return false;
     this.ammo.set(type, Math.min(cap, current + amount));
+    return true;
   }
 
   display(type: AmmoType): string {
