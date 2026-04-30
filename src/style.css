@@ -1,0 +1,152 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  color: #fbe7a1;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+canvas#game {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  cursor: none;
+}
+
+#hud {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px 24px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.hud-row {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.hud-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 96px;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+}
+
+.hud-label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #b88a2c;
+}
+
+.hud-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #fbe7a1;
+  font-family: 'Impact', 'Courier New', sans-serif;
+}
+
+#crosshair {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  z-index: 5;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+}
+
+#overlay,
+#death-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  text-align: center;
+  padding: 20px;
+}
+
+#overlay.hidden,
+#death-overlay.hidden {
+  display: none;
+}
+
+#overlay h1,
+#death-overlay h1 {
+  font-size: 96px;
+  letter-spacing: 16px;
+  color: #d62828;
+  text-shadow: 0 0 32px rgba(214, 40, 40, 0.6);
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #b88a2c;
+  margin-bottom: 48px;
+  letter-spacing: 4px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 32px;
+  margin-bottom: 48px;
+  font-size: 16px;
+  color: #fbe7a1;
+}
+
+.controls kbd {
+  background: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+button {
+  background: #d62828;
+  color: #fbe7a1;
+  border: 2px solid #fbe7a1;
+  font-size: 24px;
+  padding: 16px 48px;
+  letter-spacing: 4px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:hover {
+  background: #fbe7a1;
+  color: #d62828;
+  transform: scale(1.05);
+}
+
+#death-stats {
+  font-size: 18px;
+  color: #fbe7a1;
+  margin-bottom: 32px;
+}
