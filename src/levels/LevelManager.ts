@@ -29,11 +29,13 @@ export class LevelManager {
     this.specs = specs;
   }
 
-  /** Load the first level into the world. Call once at game start. */
+  /** Load the first level into the world. Call once at game start, and on RESPAWN /
+   * PLAY AGAIN — both reset the campaign kill counter to zero. */
   start(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player): void {
     this.index = 0;
     this.portalSpawned = false;
     this.victory = false;
+    enemies.kills = 0;
     this.applyCurrent(level, waves, enemies, player, 'GET READY');
   }
 
@@ -87,9 +89,9 @@ export class LevelManager {
   private applyCurrent(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, banner: string): void {
     const spec = this.specs[this.index];
     level.loadSpec(spec);
-    // Preserve the campaign kill total across level transitions. EnemyManager.reset()
-    // also despawns enemies/projectiles, which is what we want — but it zeroes kills,
-    // which would lose the cumulative campaign score.
+    // Preserve the campaign kill total across `enemies.reset()` (which despawns
+    // active enemies/projectiles but also zeroes kills). For full game resets,
+    // start() explicitly zeroes kills before this runs, so the saved value is 0.
     const savedKills = enemies.kills;
     enemies.reset();
     enemies.kills = savedKills;
