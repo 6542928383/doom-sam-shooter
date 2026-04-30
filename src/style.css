@@ -97,7 +97,9 @@ canvas#game {
 
 #overlay,
 #death-overlay,
-#victory-overlay {
+#victory-overlay,
+#pause-overlay,
+#settings-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.9);
@@ -112,8 +114,25 @@ canvas#game {
 
 #overlay.hidden,
 #death-overlay.hidden,
-#victory-overlay.hidden {
+#victory-overlay.hidden,
+#pause-overlay.hidden,
+#settings-overlay.hidden {
   display: none;
+}
+
+#pause-overlay h1 {
+  font-size: 96px;
+  letter-spacing: 16px;
+  color: #fbe7a1;
+  text-shadow: 0 0 32px rgba(251, 231, 161, 0.4);
+  margin-bottom: 32px;
+}
+
+#settings-overlay h1 {
+  font-size: 64px;
+  letter-spacing: 12px;
+  color: #fbe7a1;
+  margin-bottom: 32px;
 }
 
 #overlay h1,
@@ -181,6 +200,75 @@ button:hover {
   background: #fbe7a1;
   color: #d62828;
   transform: scale(1.05);
+}
+
+button.secondary {
+  background: transparent;
+  color: #fbe7a1;
+  border-color: #b88a2c;
+  font-size: 18px;
+  padding: 12px 36px;
+  letter-spacing: 3px;
+}
+
+button.secondary:hover {
+  background: rgba(251, 231, 161, 0.15);
+  color: #fbe7a1;
+  transform: scale(1.03);
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.settings-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 36px;
+  width: 480px;
+  max-width: 90vw;
+}
+
+.settings-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 80px;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.settings-row.settings-row-toggle {
+  grid-template-columns: 140px 1fr;
+  justify-items: start;
+}
+
+.settings-label {
+  text-align: right;
+  color: #b88a2c;
+}
+
+.settings-row input[type='range'] {
+  width: 100%;
+  accent-color: #d62828;
+}
+
+.settings-row input[type='checkbox'] {
+  width: 22px;
+  height: 22px;
+  accent-color: #d62828;
+  cursor: pointer;
+}
+
+.settings-value {
+  font-family: 'Impact', 'Courier New', sans-serif;
+  font-size: 16px;
+  color: #fbe7a1;
+  text-align: right;
 }
 
 #death-stats {
