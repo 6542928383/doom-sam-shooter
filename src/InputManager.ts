@@ -8,6 +8,7 @@ export class InputManager {
   onPointerLockChange: ((locked: boolean) => void) | null = null;
   onFire: (() => void) | null = null;
   onSwitchWeapon: ((slot: number) => void) | null = null;
+  onCycleWeapon: ((dir: 1 | -1) => void) | null = null;
 
   private mouseDown = false;
 
@@ -47,6 +48,13 @@ export class InputManager {
       this.pointerLocked = document.pointerLockElement === this.canvas;
       if (this.onPointerLockChange) this.onPointerLockChange(this.pointerLocked);
     });
+
+    document.addEventListener('wheel', (e) => {
+      if (!this.pointerLocked) return;
+      if (e.deltaY === 0) return;
+      const dir: 1 | -1 = e.deltaY > 0 ? 1 : -1;
+      if (this.onCycleWeapon) this.onCycleWeapon(dir);
+    }, { passive: true });
   }
 
   isFiring(): boolean {

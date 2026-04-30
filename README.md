@@ -31,13 +31,26 @@ The `dist/` directory contains a fully static bundle that can be served from any
 | Fire            | Left mouse button      |
 | Sprint          | <kbd>Shift</kbd>       |
 | Jump            | <kbd>Space</kbd>       |
-| Switch weapon   | <kbd>1</kbd>–<kbd>9</kbd> (PR #2) |
+| Switch weapon   | <kbd>1</kbd>–<kbd>7</kbd>  |
+| Cycle weapon    | Mouse wheel            |
 | Release pointer | <kbd>Esc</kbd>         |
+
+## Arsenal
+
+| Slot | Weapon            | Type     | Ammo    | Notes                                              |
+| ---- | ----------------- | -------- | ------- | -------------------------------------------------- |
+| 1    | Fist              | Melee    | ∞       | Panic option, surprisingly viable on stunned foes. |
+| 2    | Pistol            | Hitscan  | Bullets | Fast semi-auto, accurate.                          |
+| 3    | Shotgun           | Hitscan  | Shells  | 8-pellet spread, devastating up close.             |
+| 4    | Chaingun          | Hitscan  | Bullets | Mild spread, full-auto, the workhorse.             |
+| 5    | Rocket Launcher   | Splash   | Rockets | Slow projectile, big AoE — mind your toes.         |
+| 6    | Minigun           | Plasma   | Bullets | Rapid plasma stream, perfect for crowds.           |
+| 7    | Cannon            | Splash   | Cells   | Heavy ball, 8m AoE, the Serious Sam crowd-eraser.  |
 
 ## Roadmap
 
 - [x] **PR #1 — Foundation:** FPS controller, pointer-lock, hitscan pistol, single arena, basic horde, HUD, death/respawn flow.
-- [ ] **PR #2 — Arsenal:** shotgun, chaingun, rocket launcher, minigun, BFG-style heavy, slot switching, weapon-pickups.
+- [x] **PR #2 — Arsenal:** fist, pistol, shotgun, chaingun, rocket launcher, minigun, cannon. Inventory + ammo types + projectile system + splash damage.
 - [ ] **PR #3 — Bestiary:** ranged imps, kamikaze rushers, heavy bulls, flying skulls, scripted spawn waves.
 - [ ] **PR #4 — Levels:** 3+ hand-built levels with corridor/arena flow, level-end portals.
 - [ ] **PR #5 — Pickups & damage model:** medkits, armor shards, ammo crates, secret areas.
