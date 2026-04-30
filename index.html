@@ -7,7 +7,18 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
+    <div id="wave-banner" class="hidden"></div>
     <div id="hud">
+      <div class="hud-row hud-row-top">
+        <div class="hud-stat" id="hud-wave">
+          <span class="hud-label">WAVE</span>
+          <span class="hud-value" id="hud-wave-value">1</span>
+        </div>
+        <div class="hud-stat" id="hud-remaining">
+          <span class="hud-label">ENEMIES</span>
+          <span class="hud-value" id="hud-remaining-value">0</span>
+        </div>
+      </div>
       <div class="hud-row">
         <div class="hud-stat" id="hud-health">
           <span class="hud-label">HEALTH</span>

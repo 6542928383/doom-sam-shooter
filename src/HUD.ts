@@ -4,6 +4,9 @@ interface HUDState {
   ammo: string;
   weapon: string;
   kills: number;
+  wave: number;
+  remaining: number;
+  banner: string | null;
 }
 
 export class HUD {
@@ -12,6 +15,9 @@ export class HUD {
   private elAmmo = document.getElementById('hud-ammo-value')!;
   private elWeapon = document.getElementById('hud-weapon-value')!;
   private elKills = document.getElementById('hud-kills-value')!;
+  private elWave = document.getElementById('hud-wave-value')!;
+  private elRemaining = document.getElementById('hud-remaining-value')!;
+  private elBanner = document.getElementById('wave-banner')!;
   private flashTimer = 0;
   private body = document.body;
 
@@ -21,6 +27,15 @@ export class HUD {
     this.elAmmo.textContent = state.ammo;
     this.elWeapon.textContent = state.weapon;
     this.elKills.textContent = state.kills.toString();
+    this.elWave.textContent = state.wave.toString();
+    this.elRemaining.textContent = state.remaining.toString();
+
+    if (state.banner) {
+      this.elBanner.textContent = state.banner;
+      this.elBanner.classList.remove('hidden');
+    } else {
+      this.elBanner.classList.add('hidden');
+    }
 
     if (this.flashTimer > 0) {
       this.flashTimer -= 0.016;

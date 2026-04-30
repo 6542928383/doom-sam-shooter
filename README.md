@@ -51,7 +51,7 @@ The `dist/` directory contains a fully static bundle that can be served from any
 
 - [x] **PR #1 — Foundation:** FPS controller, pointer-lock, hitscan pistol, single arena, basic horde, HUD, death/respawn flow.
 - [x] **PR #2 — Arsenal:** fist, pistol, shotgun, chaingun, rocket launcher, minigun, cannon. Inventory + ammo types + projectile system + splash damage.
-- [ ] **PR #3 — Bestiary:** ranged imps, kamikaze rushers, heavy bulls, flying skulls, scripted spawn waves.
+- [x] **PR #3 — Bestiary:** five enemy archetypes (Imp, Kamikaze, Skeleton, Bull, Mancubus), enemy projectiles, scripted SS-style spawn waves with intermissions and looping difficulty.
 - [ ] **PR #4 — Levels:** 3+ hand-built levels with corridor/arena flow, level-end portals.
 - [ ] **PR #5 — Pickups & damage model:** medkits, armor shards, ammo crates, secret areas.
 - [ ] **PR #6 — Audio:** Web Audio SFX (hits, weapons, enemy growls), looping metal soundtrack.
@@ -67,8 +67,9 @@ src/
 ├── Player.ts          # FPS movement, look, jump, damage handling
 ├── InputManager.ts    # Pointer-lock, keyboard, mouse, weapon-slot keys
 ├── Level.ts           # Arena geometry, lighting, AABB obstacles, spawn points
-├── Enemy.ts           # Single enemy: AI, animation, collision, raycast hitbox
-├── EnemyManager.ts    # Maintains a target population, tracks kills
+├── enemies/           # Enemy archetypes (Imp, Kamikaze, Skeleton, Bull, Mancubus) + base class
+├── waves/WaveManager  # Scripted spawn schedule, intermissions, difficulty looping
+├── EnemyManager.ts    # Owns the live enemy list, drives AI ticks + enemy projectiles
 ├── WeaponSystem.ts    # Hitscan firing, viewmodel, muzzle flash, recoil
 ├── HUD.ts             # DOM-based heads-up display (cheap, accessible)
 └── style.css          # Overlay/HUD styling
