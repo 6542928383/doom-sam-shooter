@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { EnemyKind } from '../enemies/types';
+import { PickupKind } from '../pickups/types';
 import type { LevelSpec, ObstacleSpec } from './LevelSpec';
 
 /** Add the four outer walls of a rectangular arena to an obstacle list. */
@@ -60,6 +61,18 @@ function buildFoundry(): LevelSpec {
       { name: 'WAVE 2 — Bombers', durationSec: 8, plan: [[EnemyKind.Imp, 5], [EnemyKind.Kamikaze, 2]] },
       { name: 'WAVE 3 — Ranged Fire', durationSec: 9, plan: [[EnemyKind.Imp, 3], [EnemyKind.Skeleton, 3]] },
     ],
+    pickups: [
+      // Health and ammo near the player start so a fresh run is well stocked.
+      { kind: PickupKind.Health, x: -8, z: 48 },
+      { kind: PickupKind.Health, x: 8, z: 48 },
+      { kind: PickupKind.Shells, x: -25, z: 25 },
+      { kind: PickupKind.Bullets, x: 25, z: 25 },
+      { kind: PickupKind.Armor, x: 0, z: 35 },
+      // Mid-arena rewards for pushing forward.
+      { kind: PickupKind.Health, x: -38, z: -38 },
+      { kind: PickupKind.Health, x: 38, z: -38 },
+      { kind: PickupKind.Rockets, x: 0, z: -45 },
+    ],
   };
 }
 
@@ -112,6 +125,17 @@ function buildCathedral(): LevelSpec {
       { name: 'WAVE 1 — Choir of Bones', durationSec: 8, plan: [[EnemyKind.Skeleton, 5], [EnemyKind.Imp, 2]] },
       { name: 'WAVE 2 — Stampede', durationSec: 9, plan: [[EnemyKind.Bull, 2], [EnemyKind.Kamikaze, 3]] },
       { name: 'WAVE 3 — Heavy Hand', durationSec: 11, plan: [[EnemyKind.Skeleton, 4], [EnemyKind.Mancubus, 1], [EnemyKind.Imp, 3]] },
+    ],
+    pickups: [
+      { kind: PickupKind.Armor, x: 0, z: 36, amount: 50 },
+      { kind: PickupKind.Health, x: -18, z: 28 },
+      { kind: PickupKind.Health, x: 18, z: 28 },
+      { kind: PickupKind.Cells, x: 0, z: 0 },
+      { kind: PickupKind.Shells, x: -30, z: -10 },
+      { kind: PickupKind.Shells, x: 30, z: -10 },
+      { kind: PickupKind.Rockets, x: -30, z: -30 },
+      { kind: PickupKind.Rockets, x: 30, z: -30 },
+      { kind: PickupKind.Health, x: 0, z: -32 },
     ],
   };
 }
@@ -167,6 +191,21 @@ function buildBridge(): LevelSpec {
         [EnemyKind.Imp, 6], [EnemyKind.Kamikaze, 4], [EnemyKind.Skeleton, 3],
         [EnemyKind.Bull, 2], [EnemyKind.Mancubus, 2],
       ] },
+    ],
+    pickups: [
+      { kind: PickupKind.Health, x: -10, z: 50 },
+      { kind: PickupKind.Health, x: 10, z: 50 },
+      { kind: PickupKind.Armor, x: 0, z: 50, amount: 50 },
+      { kind: PickupKind.Shells, x: -25, z: 25 },
+      { kind: PickupKind.Shells, x: 25, z: 25 },
+      { kind: PickupKind.Bullets, x: -25, z: -25 },
+      { kind: PickupKind.Bullets, x: 25, z: -25 },
+      { kind: PickupKind.Rockets, x: 0, z: 0 },
+      { kind: PickupKind.Rockets, x: -45, z: 0 },
+      { kind: PickupKind.Rockets, x: 45, z: 0 },
+      { kind: PickupKind.Cells, x: -40, z: -40 },
+      { kind: PickupKind.Cells, x: 40, z: -40 },
+      { kind: PickupKind.Health, x: 0, z: -45 },
     ],
   };
 }

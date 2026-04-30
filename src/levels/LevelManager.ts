@@ -2,6 +2,7 @@ import type { Level } from '../Level';
 import type { WaveManager } from '../waves/WaveManager';
 import type { EnemyManager } from '../EnemyManager';
 import type { Player } from '../Player';
+import type { PickupManager } from '../pickups/PickupManager';
 import type { LevelSpec } from './LevelSpec';
 import { LEVELS } from './levelData';
 
@@ -31,16 +32,16 @@ export class LevelManager {
 
   /** Load the first level into the world. Call once at game start, and on RESPAWN /
    * PLAY AGAIN — both reset the campaign kill counter to zero. */
-  start(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player): void {
+  start(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, pickups: PickupManager): void {
     this.index = 0;
     this.portalSpawned = false;
     this.victory = false;
     enemies.kills = 0;
-    this.applyCurrent(level, waves, enemies, player, 'GET READY');
+    this.applyCurrent(level, waves, enemies, player, pickups, 'GET READY');
   }
 
-  reset(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player): void {
-    this.start(level, waves, enemies, player);
+  reset(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, pickups: PickupManager): void {
+    this.start(level, waves, enemies, player, pickups);
   }
 
   currentSpec(): LevelSpec {
@@ -61,7 +62,7 @@ export class LevelManager {
    * current level's last wave is cleared, and triggers a transition when the player
    * walks into it.
    */
-  update(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player): void {
+  update(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, pickups: PickupManager): void {
     if (this.victory) return;
 
     const status = waves.status(enemies);
@@ -72,21 +73,21 @@ export class LevelManager {
 
     if (this.portalSpawned) {
       if (level.isInsidePortal(player.position.x, player.position.z)) {
-        this.advance(level, waves, enemies, player);
+        this.advance(level, waves, enemies, player, pickups);
       }
     }
   }
 
-  private advance(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player): void {
+  private advance(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, pickups: PickupManager): void {
     if (this.index >= this.specs.length - 1) {
       this.victory = true;
       return;
     }
     this.index++;
-    this.applyCurrent(level, waves, enemies, player, this.specs[this.index].subtitle);
+    this.applyCurrent(level, waves, enemies, player, pickups, this.specs[this.index].subtitle);
   }
 
-  private applyCurrent(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, banner: string): void {
+  private applyCurrent(level: Level, waves: WaveManager, enemies: EnemyManager, player: Player, pickups: PickupManager, banner: string): void {
     const spec = this.specs[this.index];
     level.loadSpec(spec);
     // Preserve the campaign kill total across `enemies.reset()` (which despawns
@@ -96,6 +97,7 @@ export class LevelManager {
     enemies.reset();
     enemies.kills = savedKills;
     waves.setWaves(spec.waves, banner);
+    pickups.loadSpecs(spec.pickups);
     player.respawnAt(level.playerStart);
     this.portalSpawned = false;
   }

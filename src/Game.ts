@@ -8,6 +8,7 @@ import { HUD } from './HUD';
 import { WaveManager } from './waves/WaveManager';
 import { LevelManager } from './levels/LevelManager';
 import { LEVELS } from './levels/levelData';
+import { PickupManager } from './pickups/PickupManager';
 
 export class Game {
   private renderer: THREE.WebGLRenderer;
@@ -21,6 +22,7 @@ export class Game {
   private weapons: WeaponSystem;
   private waves: WaveManager;
   private levels: LevelManager;
+  private pickups: PickupManager;
   private hud: HUD;
   private running = false;
   private startedAt = 0;
@@ -48,8 +50,9 @@ export class Game {
     this.weapons = new WeaponSystem(this.scene, this.camera, this.level);
     this.enemies = new EnemyManager(this.scene, this.level);
     this.waves = new WaveManager();
+    this.pickups = new PickupManager(this.scene);
     this.levels = new LevelManager();
-    this.levels.start(this.level, this.waves, this.enemies, this.player);
+    this.levels.start(this.level, this.waves, this.enemies, this.player, this.pickups);
     this.hud = new HUD();
 
     this.input.onPointerLockChange = (locked) => {
@@ -88,7 +91,7 @@ export class Game {
   reset(): void {
     this.player.reset();
     this.weapons.reset();
-    this.levels.reset(this.level, this.waves, this.enemies, this.player);
+    this.levels.reset(this.level, this.waves, this.enemies, this.player, this.pickups);
     this.startedAt = 0;
   }
 
@@ -105,9 +108,10 @@ export class Game {
     this.waves.update(dt, this.enemies);
     this.enemies.update(dt, this.player);
     this.weapons.update(dt, this.input.isFiring(), this.enemies);
+    this.pickups.update(dt, this.player, this.weapons);
     this.level.tickPortal(dt);
     const indexBefore = this.levels.status().index;
-    this.levels.update(this.level, this.waves, this.enemies, this.player);
+    this.levels.update(this.level, this.waves, this.enemies, this.player, this.pickups);
     if (this.levels.status().index !== indexBefore) {
       // Level transition just fired — drop any in-flight rockets / cannon
       // balls so they don't carry over into the new arena.
