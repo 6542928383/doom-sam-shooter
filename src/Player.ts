@@ -34,12 +34,18 @@ export class Player {
   }
 
   reset(): void {
-    this.position.copy(this.level.playerStart);
+    this.respawnAt(this.level.playerStart);
+    this.health = this.maxHealth;
+    this.armor = 0;
+  }
+
+  /** Teleport the player to a new spot (level transition or initial spawn) without
+   * touching health/armor. Resets motion, look, and i-frames. */
+  respawnAt(target: THREE.Vector3): void {
+    this.position.copy(target);
     this.velocityY = 0;
     this.yaw = Math.PI; // facing -Z (into the arena)
     this.pitch = 0;
-    this.health = this.maxHealth;
-    this.armor = 0;
     this.grounded = true;
     this.invulnerableUntil = 0;
     this.applyTransform();

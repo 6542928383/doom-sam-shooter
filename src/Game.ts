@@ -6,6 +6,8 @@ import { EnemyManager } from './EnemyManager';
 import { WeaponSystem } from './WeaponSystem';
 import { HUD } from './HUD';
 import { WaveManager } from './waves/WaveManager';
+import { LevelManager } from './levels/LevelManager';
+import { LEVELS } from './levels/levelData';
 
 export class Game {
   private renderer: THREE.WebGLRenderer;
@@ -18,11 +20,13 @@ export class Game {
   private enemies: EnemyManager;
   private weapons: WeaponSystem;
   private waves: WaveManager;
+  private levels: LevelManager;
   private hud: HUD;
   private running = false;
   private startedAt = 0;
 
   onDeath: ((kills: number, timeAlive: number) => void) | null = null;
+  onVictory: ((kills: number, timeAlive: number) => void) | null = null;
   onPointerLockExit: (() => void) | null = null;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -39,11 +43,13 @@ export class Game {
 
     this.clock = new THREE.Clock();
     this.input = new InputManager(canvas);
-    this.level = new Level(this.scene);
+    this.level = new Level(this.scene, LEVELS[0]);
     this.player = new Player(this.camera, this.level);
     this.weapons = new WeaponSystem(this.scene, this.camera, this.level);
     this.enemies = new EnemyManager(this.scene, this.level);
     this.waves = new WaveManager();
+    this.levels = new LevelManager();
+    this.levels.start(this.level, this.waves, this.enemies, this.player);
     this.hud = new HUD();
 
     this.input.onPointerLockChange = (locked) => {
@@ -81,9 +87,8 @@ export class Game {
 
   reset(): void {
     this.player.reset();
-    this.enemies.reset();
     this.weapons.reset();
-    this.waves.reset();
+    this.levels.reset(this.level, this.waves, this.enemies, this.player);
     this.startedAt = 0;
   }
 
@@ -100,12 +105,16 @@ export class Game {
     this.waves.update(dt, this.enemies);
     this.enemies.update(dt, this.player);
     this.weapons.update(dt, this.input.isFiring(), this.enemies);
+    this.level.tickPortal(dt);
+    this.levels.update(this.level, this.waves, this.enemies, this.player);
 
     if (this.player.didTakeDamage()) {
       this.hud.flashDamage();
     }
 
     const wave = this.waves.status(this.enemies);
+    const lvl = this.levels.status();
+    const banner = lvl.victory ? 'VICTORY' : wave.banner;
     this.hud.update({
       health: this.player.health,
       armor: this.player.armor,
@@ -113,9 +122,22 @@ export class Game {
       weapon: this.weapons.currentName(),
       kills: this.enemies.kills,
       wave: wave.wave,
+      totalWaves: wave.totalWaves,
       remaining: wave.remaining,
-      banner: wave.banner,
-    });
+      level: lvl.index,
+      totalLevels: lvl.total,
+      levelName: lvl.name,
+      banner,
+    }, dt);
+
+    if (lvl.victory && !this.player.isDead()) {
+      this.running = false;
+      this.input.exitPointerLock();
+      const timeAlive = (performance.now() - this.startedAt) / 1000;
+      if (this.onVictory) this.onVictory(this.enemies.kills, timeAlive);
+      this.renderer.render(this.scene, this.camera);
+      return;
+    }
 
     if (this.player.isDead()) {
       this.running = false;
