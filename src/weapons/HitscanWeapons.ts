@@ -34,10 +34,14 @@ export class Fist implements Weapon {
       const dz = enemy.position.z - ctx.origin.z;
       const distSq = dx * dx + dz * dz;
       if (distSq > 4) continue;
-      // facing check: angle between weapon direction and to-enemy.
+      // Facing check: angle between the horizontal-projected weapon direction
+      // and the unit vector to the enemy. We normalize the projection so the
+      // check works regardless of camera pitch (looking up/down at point-blank).
       const len = Math.sqrt(distSq);
       if (len < 0.001) continue;
-      const dot = (dx / len) * ctx.direction.x + (dz / len) * ctx.direction.z;
+      const dirHoriz = Math.sqrt(ctx.direction.x * ctx.direction.x + ctx.direction.z * ctx.direction.z);
+      if (dirHoriz < 0.001) continue;
+      const dot = (dx / len) * (ctx.direction.x / dirHoriz) + (dz / len) * (ctx.direction.z / dirHoriz);
       if (dot > 0.5) {
         enemy.takeDamage(20);
       }

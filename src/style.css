@@ -74,7 +74,8 @@ canvas#game {
 }
 
 #overlay,
-#death-overlay {
+#death-overlay,
+#victory-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.9);
@@ -88,7 +89,8 @@ canvas#game {
 }
 
 #overlay.hidden,
-#death-overlay.hidden {
+#death-overlay.hidden,
+#victory-overlay.hidden {
   display: none;
 }
 
@@ -99,6 +101,20 @@ canvas#game {
   color: #d62828;
   text-shadow: 0 0 32px rgba(214, 40, 40, 0.6);
   margin-bottom: 8px;
+}
+
+#victory-overlay h1 {
+  font-size: 96px;
+  letter-spacing: 16px;
+  color: #66ffaa;
+  text-shadow: 0 0 32px rgba(102, 255, 170, 0.6);
+  margin-bottom: 8px;
+}
+
+#victory-stats {
+  font-size: 18px;
+  color: #fbe7a1;
+  margin-bottom: 32px;
 }
 
 .subtitle {

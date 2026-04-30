@@ -165,6 +165,12 @@ export class WeaponSystem {
     this.projectiles.update(dt, enemies);
   }
 
+  /** Despawn any in-flight projectiles. Used on level transitions to keep
+   * rockets/cannon balls from carrying over into the new arena. */
+  clearProjectiles(): void {
+    this.projectiles.reset();
+  }
+
   /** Pickup hooks (used by future PR #5). */
   addAmmoBullets(n: number): void {
     this.inventory.add(this.weapons[1].ammoType, n);
