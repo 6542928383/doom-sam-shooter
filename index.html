@@ -60,9 +60,48 @@
         <div><kbd>1</kbd>–<kbd>7</kbd> weapon</div>
         <div><kbd>Wheel</kbd> cycle</div>
         <div><kbd>M</kbd> mute</div>
-        <div><kbd>Esc</kbd> release pointer</div>
+        <div><kbd>Esc</kbd> pause</div>
       </div>
-      <button id="start-btn">CLICK TO PLAY</button>
+      <div class="menu-buttons">
+        <button id="start-btn">CLICK TO PLAY</button>
+        <button id="open-settings-btn" class="secondary">SETTINGS</button>
+      </div>
+    </div>
+    <div id="pause-overlay" class="hidden menu">
+      <h1>PAUSED</h1>
+      <div class="menu-buttons">
+        <button id="resume-btn">RESUME</button>
+        <button id="pause-settings-btn" class="secondary">SETTINGS</button>
+        <button id="restart-btn" class="secondary">RESTART RUN</button>
+        <button id="main-menu-btn" class="secondary">MAIN MENU</button>
+      </div>
+    </div>
+    <div id="settings-overlay" class="hidden menu">
+      <h1>SETTINGS</h1>
+      <div class="settings-rows">
+        <label class="settings-row">
+          <span class="settings-label">VOLUME</span>
+          <input id="settings-volume" type="range" min="0" max="1" step="0.01" />
+          <span class="settings-value" id="settings-volume-value">60%</span>
+        </label>
+        <label class="settings-row">
+          <span class="settings-label">SENSITIVITY</span>
+          <input id="settings-sensitivity" type="range" min="0.4" max="2.5" step="0.05" />
+          <span class="settings-value" id="settings-sensitivity-value">1.00x</span>
+        </label>
+        <label class="settings-row">
+          <span class="settings-label">FOV</span>
+          <input id="settings-fov" type="range" min="60" max="110" step="1" />
+          <span class="settings-value" id="settings-fov-value">85°</span>
+        </label>
+        <label class="settings-row settings-row-toggle">
+          <span class="settings-label">MUTE</span>
+          <input id="settings-mute" type="checkbox" />
+        </label>
+      </div>
+      <div class="menu-buttons">
+        <button id="settings-back-btn">BACK</button>
+      </div>
     </div>
     <div id="death-overlay" class="hidden">
       <h1>YOU DIED</h1>

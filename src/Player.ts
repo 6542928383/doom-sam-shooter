@@ -8,7 +8,8 @@ const WALK_SPEED = 8;
 const SPRINT_MULT = 1.55;
 const JUMP_VELOCITY = 8.2;
 const GRAVITY = 22;
-const MOUSE_SENSITIVITY = 0.0022;
+/** Base radians-per-mouse-pixel. Player.sensitivity multiplies this. */
+const MOUSE_BASE = 0.0022;
 
 export class Player {
   camera: THREE.PerspectiveCamera;
@@ -21,6 +22,8 @@ export class Player {
   armor = 0;
   maxHealth = 100;
   maxArmor = 100;
+  /** Multiplier on the base mouse sensitivity (1.0 = stock). */
+  sensitivity = 1.0;
   private grounded = true;
   private damagedThisFrame = false;
   private invulnerableUntil = 0;
@@ -80,8 +83,9 @@ export class Player {
     if (this.isDead()) return;
 
     const mouse = input.consumeMouse();
-    this.yaw -= mouse.dx * MOUSE_SENSITIVITY;
-    this.pitch -= mouse.dy * MOUSE_SENSITIVITY;
+    const sens = MOUSE_BASE * this.sensitivity;
+    this.yaw -= mouse.dx * sens;
+    this.pitch -= mouse.dy * sens;
     const limit = Math.PI / 2 - 0.05;
     this.pitch = Math.max(-limit, Math.min(limit, this.pitch));
 

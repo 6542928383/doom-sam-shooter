@@ -10,6 +10,7 @@ import { LevelManager } from './levels/LevelManager';
 import { LEVELS } from './levels/levelData';
 import { PickupManager } from './pickups/PickupManager';
 import { AudioManager } from './audio/AudioManager';
+import { Settings } from './settings/Settings';
 
 export class Game {
   private renderer: THREE.WebGLRenderer;
@@ -25,6 +26,7 @@ export class Game {
   private levels: LevelManager;
   private pickups: PickupManager;
   private audio: AudioManager;
+  private settings: Settings;
   private hud: HUD;
   private running = false;
   private startedAt = 0;
@@ -49,8 +51,14 @@ export class Game {
     this.clock = new THREE.Clock();
     this.input = new InputManager(canvas);
     this.audio = new AudioManager();
+    this.settings = new Settings();
     this.level = new Level(this.scene, LEVELS[0]);
     this.player = new Player(this.camera, this.level);
+    this.settings.subscribe((v) => {
+      this.player.sensitivity = v.sensitivity;
+      this.camera.fov = v.fov;
+      this.camera.updateProjectionMatrix();
+    });
     this.weapons = new WeaponSystem(this.scene, this.camera, this.level, this.audio);
     this.enemies = new EnemyManager(this.scene, this.level, this.audio);
     this.waves = new WaveManager();
@@ -107,6 +115,21 @@ export class Game {
 
   audioManager(): AudioManager {
     return this.audio;
+  }
+
+  settingsStore(): Settings {
+    return this.settings;
+  }
+
+  /** Lift pointer lock without ending the run, e.g. when opening pause UI. */
+  pause(): void {
+    this.running = false;
+    this.input.exitPointerLock();
+  }
+
+  /** True if the player has died and is awaiting RESPAWN. */
+  isInGame(): boolean {
+    return !this.player.isDead();
   }
 
   reset(): void {
