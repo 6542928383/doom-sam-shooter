@@ -106,7 +106,13 @@ export class Game {
     this.enemies.update(dt, this.player);
     this.weapons.update(dt, this.input.isFiring(), this.enemies);
     this.level.tickPortal(dt);
+    const indexBefore = this.levels.status().index;
     this.levels.update(this.level, this.waves, this.enemies, this.player);
+    if (this.levels.status().index !== indexBefore) {
+      // Level transition just fired — drop any in-flight rockets / cannon
+      // balls so they don't carry over into the new arena.
+      this.weapons.clearProjectiles();
+    }
 
     if (this.player.didTakeDamage()) {
       this.hud.flashDamage();
