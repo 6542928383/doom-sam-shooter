@@ -73,6 +73,8 @@ function buildFoundry(): LevelSpec {
       { kind: PickupKind.Health, x: 38, z: -38 },
       { kind: PickupKind.Rockets, x: 0, z: -45 },
     ],
+    ambientHz: 55,
+    ambientColor: 'menacing',
   };
 }
 
@@ -137,6 +139,8 @@ function buildCathedral(): LevelSpec {
       { kind: PickupKind.Rockets, x: 30, z: -30 },
       { kind: PickupKind.Health, x: 0, z: -32 },
     ],
+    ambientHz: 73,
+    ambientColor: 'cold',
   };
 }
 
@@ -207,6 +211,8 @@ function buildBridge(): LevelSpec {
       { kind: PickupKind.Cells, x: 40, z: -40 },
       { kind: PickupKind.Health, x: 0, z: -45 },
     ],
+    ambientHz: 49,
+    ambientColor: 'warm',
   };
 }
 

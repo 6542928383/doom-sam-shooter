@@ -9,8 +9,34 @@ const deathStats = document.getElementById('death-stats') as HTMLParagraphElemen
 const victoryOverlay = document.getElementById('victory-overlay') as HTMLDivElement;
 const victoryBtn = document.getElementById('victory-btn') as HTMLButtonElement;
 const victoryStats = document.getElementById('victory-stats') as HTMLParagraphElement;
+const audioToggle = document.getElementById('audio-toggle') as HTMLButtonElement;
 
 const game = new Game(canvas);
+const audio = game.audioManager();
+
+function refreshAudioToggle(): void {
+  if (audio.isMuted()) {
+    audioToggle.textContent = 'SOUND OFF';
+    audioToggle.classList.add('muted');
+  } else {
+    audioToggle.textContent = 'SOUND ON';
+    audioToggle.classList.remove('muted');
+  }
+}
+refreshAudioToggle();
+
+audioToggle.addEventListener('click', () => {
+  audio.resume();
+  audio.toggleMute();
+  refreshAudioToggle();
+});
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'KeyM' && !e.repeat) {
+    audio.toggleMute();
+    refreshAudioToggle();
+  }
+});
 
 function start(): void {
   overlay.classList.remove('visible');

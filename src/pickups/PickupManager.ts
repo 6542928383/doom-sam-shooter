@@ -2,6 +2,16 @@ import * as THREE from 'three';
 import type { Player } from '../Player';
 import type { WeaponSystem } from '../WeaponSystem';
 import { PickupKind, PICKUP_AMOUNTS, PICKUP_VISUALS, type PickupSpec } from './types';
+import type { AudioManager, SfxId } from '../audio/AudioManager';
+
+const PICKUP_SFX: Record<PickupKind, SfxId> = {
+  [PickupKind.Health]: 'pickupHealth',
+  [PickupKind.Armor]: 'pickupArmor',
+  [PickupKind.Bullets]: 'pickupAmmo',
+  [PickupKind.Shells]: 'pickupAmmo',
+  [PickupKind.Rockets]: 'pickupAmmo',
+  [PickupKind.Cells]: 'pickupAmmo',
+};
 
 const PICKUP_RADIUS = 1.4;
 const PICKUP_HEIGHT = 0.9;
@@ -19,11 +29,13 @@ interface ActivePickup {
 
 export class PickupManager {
   private scene: THREE.Scene;
+  private audio: AudioManager;
   private pickups: ActivePickup[] = [];
   private elapsed = 0;
 
-  constructor(scene: THREE.Scene) {
+  constructor(scene: THREE.Scene, audio: AudioManager) {
     this.scene = scene;
+    this.audio = audio;
   }
 
   reset(): void {
@@ -87,6 +99,7 @@ export class PickupManager {
       if (dx * dx + dz * dz < PICKUP_RADIUS * PICKUP_RADIUS) {
         if (this.applyTo(p, player, weapons)) {
           p.alive = false;
+          this.audio.play(PICKUP_SFX[p.kind]);
           this.scene.remove(p.group);
           this.disposeGroup(p.group);
         }

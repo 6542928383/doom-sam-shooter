@@ -98,5 +98,6 @@ export class Skeleton extends Enemy {
       color: 0x66ddff,
       radius: 0.3,
     });
+    ctx.audio.play('enemyShoot');
   }
 }

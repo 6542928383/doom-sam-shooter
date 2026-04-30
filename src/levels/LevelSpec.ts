@@ -65,4 +65,9 @@ export interface LevelSpec {
 
   /** Static pickups placed around the level. */
   pickups: PickupSpec[];
+
+  /** Root frequency (Hz) of the ambient drone synth on this level. */
+  ambientHz: number;
+  /** Tonal colour of the ambient drone. */
+  ambientColor: 'warm' | 'cold' | 'menacing';
 }

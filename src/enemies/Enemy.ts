@@ -18,6 +18,10 @@ export abstract class Enemy {
   maxHealth: number;
   alive = true;
 
+  /** Subclasses that play their own death/detonation cue (e.g. Kamikaze) set
+   * this true so EnemyManager skips the generic `enemyDie` sound on reaping. */
+  hasCustomDeathSound = false;
+
   /** Horizontal collision radius, used by the level + projectile collision. */
   radius = 0.7;
   /** Sphere hitbox radius for hitscan/projectile weapons (chest level). */

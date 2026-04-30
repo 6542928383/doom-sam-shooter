@@ -2,6 +2,7 @@ import type * as THREE from 'three';
 import type { Level } from '../Level';
 import type { Player } from '../Player';
 import type { EnemyProjectileManager } from './EnemyProjectileManager';
+import type { AudioManager } from '../audio/AudioManager';
 
 /** Identifier used by the WaveManager to request a particular archetype. */
 export enum EnemyKind {
@@ -18,4 +19,5 @@ export interface EnemyContext {
   level: Level;
   player: Player;
   projectiles: EnemyProjectileManager;
+  audio: AudioManager;
 }

@@ -9,6 +9,7 @@ import { WaveManager } from './waves/WaveManager';
 import { LevelManager } from './levels/LevelManager';
 import { LEVELS } from './levels/levelData';
 import { PickupManager } from './pickups/PickupManager';
+import { AudioManager } from './audio/AudioManager';
 
 export class Game {
   private renderer: THREE.WebGLRenderer;
@@ -23,9 +24,11 @@ export class Game {
   private waves: WaveManager;
   private levels: LevelManager;
   private pickups: PickupManager;
+  private audio: AudioManager;
   private hud: HUD;
   private running = false;
   private startedAt = 0;
+  private audioBootstrapped = false;
 
   onDeath: ((kills: number, timeAlive: number) => void) | null = null;
   onVictory: ((kills: number, timeAlive: number) => void) | null = null;
@@ -45,13 +48,14 @@ export class Game {
 
     this.clock = new THREE.Clock();
     this.input = new InputManager(canvas);
+    this.audio = new AudioManager();
     this.level = new Level(this.scene, LEVELS[0]);
     this.player = new Player(this.camera, this.level);
-    this.weapons = new WeaponSystem(this.scene, this.camera, this.level);
-    this.enemies = new EnemyManager(this.scene, this.level);
+    this.weapons = new WeaponSystem(this.scene, this.camera, this.level, this.audio);
+    this.enemies = new EnemyManager(this.scene, this.level, this.audio);
     this.waves = new WaveManager();
-    this.pickups = new PickupManager(this.scene);
-    this.levels = new LevelManager();
+    this.pickups = new PickupManager(this.scene, this.audio);
+    this.levels = new LevelManager(this.audio);
     this.levels.start(this.level, this.waves, this.enemies, this.player, this.pickups);
     this.hud = new HUD();
 
@@ -83,9 +87,26 @@ export class Game {
     if (this.running) return;
     this.running = true;
     if (this.startedAt === 0) this.startedAt = performance.now();
+    // First time the player clicks PLAY — the AudioContext can finally be
+    // created (browsers require a user gesture). The constructor's
+    // levels.start() ran earlier with audio still un-initialised, so its
+    // levelStart cue + ambient drone were silent. Replay them once. On
+    // subsequent calls (resume from Esc pause, respawn) audio is already
+    // healthy and we skip this block to avoid an audible drone restart dip.
+    this.audio.resume();
+    if (!this.audioBootstrapped) {
+      this.audioBootstrapped = true;
+      const spec = this.levels.currentSpec();
+      this.audio.play('levelStart');
+      this.audio.startAmbient(spec.ambientHz, spec.ambientColor);
+    }
     this.input.requestPointerLock();
     this.clock.start();
     this.loop();
+  }
+
+  audioManager(): AudioManager {
+    return this.audio;
   }
 
   reset(): void {
@@ -120,6 +141,7 @@ export class Game {
 
     if (this.player.didTakeDamage()) {
       this.hud.flashDamage();
+      this.audio.play(this.player.isDead() ? 'playerDie' : 'playerHurt');
     }
 
     const wave = this.waves.status(this.enemies);
@@ -142,6 +164,7 @@ export class Game {
 
     if (lvl.victory && !this.player.isDead()) {
       this.running = false;
+      this.audio.stopAmbient();
       this.input.exitPointerLock();
       const timeAlive = (performance.now() - this.startedAt) / 1000;
       if (this.onVictory) this.onVictory(this.enemies.kills, timeAlive);
@@ -151,6 +174,7 @@ export class Game {
 
     if (this.player.isDead()) {
       this.running = false;
+      this.audio.stopAmbient();
       this.input.exitPointerLock();
       const timeAlive = (performance.now() - this.startedAt) / 1000;
       if (this.onDeath) this.onDeath(this.enemies.kills, timeAlive);

@@ -113,5 +113,6 @@ export class Mancubus extends Enemy {
         radius: 0.4,
       });
     }
+    ctx.audio.play('enemyShoot');
   }
 }
