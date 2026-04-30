@@ -150,3 +150,42 @@ button:hover {
   color: #fbe7a1;
   margin-bottom: 32px;
 }
+
+.hud-row-top {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 24px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+  padding: 8px 24px 16px;
+  border-radius: 0 0 8px 8px;
+}
+
+.hud-row-top .hud-stat {
+  min-width: 80px;
+}
+
+.hud-row-top .hud-value {
+  font-size: 26px;
+}
+
+#wave-banner {
+  position: fixed;
+  top: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 48px;
+  color: #fbe7a1;
+  letter-spacing: 6px;
+  text-shadow: 0 0 24px rgba(214, 40, 40, 0.8), 0 0 8px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  z-index: 12;
+  text-align: center;
+  font-family: 'Impact', 'Courier New', sans-serif;
+  white-space: nowrap;
+}
+
+#wave-banner.hidden {
+  display: none;
+}

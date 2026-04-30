@@ -5,6 +5,7 @@ import { Level } from './Level';
 import { EnemyManager } from './EnemyManager';
 import { WeaponSystem } from './WeaponSystem';
 import { HUD } from './HUD';
+import { WaveManager } from './waves/WaveManager';
 
 export class Game {
   private renderer: THREE.WebGLRenderer;
@@ -16,6 +17,7 @@ export class Game {
   private level: Level;
   private enemies: EnemyManager;
   private weapons: WeaponSystem;
+  private waves: WaveManager;
   private hud: HUD;
   private running = false;
   private startedAt = 0;
@@ -41,6 +43,7 @@ export class Game {
     this.player = new Player(this.camera, this.level);
     this.weapons = new WeaponSystem(this.scene, this.camera, this.level);
     this.enemies = new EnemyManager(this.scene, this.level);
+    this.waves = new WaveManager();
     this.hud = new HUD();
 
     this.input.onPointerLockChange = (locked) => {
@@ -65,11 +68,6 @@ export class Game {
       this.weapons.cycle(dir);
     };
 
-    this.spawnInitialEntities();
-  }
-
-  private spawnInitialEntities(): void {
-    this.enemies.spawnInitialWave();
   }
 
   start(): void {
@@ -85,6 +83,7 @@ export class Game {
     this.player.reset();
     this.enemies.reset();
     this.weapons.reset();
+    this.waves.reset();
     this.startedAt = 0;
   }
 
@@ -98,6 +97,7 @@ export class Game {
     const dt = Math.min(this.clock.getDelta(), 0.1);
 
     this.player.update(dt, this.input);
+    this.waves.update(dt, this.enemies);
     this.enemies.update(dt, this.player);
     this.weapons.update(dt, this.input.isFiring(), this.enemies);
 
@@ -105,12 +105,16 @@ export class Game {
       this.hud.flashDamage();
     }
 
+    const wave = this.waves.status(this.enemies);
     this.hud.update({
       health: this.player.health,
       armor: this.player.armor,
       ammo: this.weapons.currentAmmo(),
       weapon: this.weapons.currentName(),
       kills: this.enemies.kills,
+      wave: wave.wave,
+      remaining: wave.remaining,
+      banner: wave.banner,
     });
 
     if (this.player.isDead()) {
